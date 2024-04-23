@@ -22,9 +22,33 @@ struct MyStringHash {
         // Add your code here
         HASH_INDEX_T w[5] = {0};
         int len = k.length();
-        int index = 0;
-        HASH_INDEX_T h = 0;;
-        while(index < len){
+        //step 1: find the number of substrings size 6
+        double subString = std::ceil((len/6.0)); //get number of substrings as a floating point so then you can round up if there is a substring not of size 6
+        int numString = static_cast<int>(subString);
+
+        int multiply = 1; //to multiply 36 without use of pow
+        int letterDig = 0; //converting letter or digit to number 1-35
+        int product = 0;
+        
+        int startInd = 0; //starting index of each substring
+        int wInd = 4; //index of W
+
+        HASH_INDEX_T h = 0;
+        //outer loop is to iterate through all substrings
+        for(int i= 0; i<numString; i++){
+             startInd = (len-1)-(6*i);
+            //inner loop to iterate through each letter in each substring
+            for (int j=startInd; j>=0; j++){
+                letterDig = letterDigitToNumber(k[j]);
+                product = letterDig * multiply;
+                multiply*=36;
+                w[wInd]+= product;
+            }  
+
+            multiply = 1;
+            wInd--;
+        }
+        /*while(index < len){
             HASH_INDEX_T curr = 0;
             int count = std::min(6,len-index); //len-index gives starting index
             for (int i =0; i<6; i++){
@@ -39,11 +63,10 @@ struct MyStringHash {
 
             w[index/6] = curr;
             index+=6;
-        }
-
+        }*/
        
-        for(int j =0; j<5; j++){
-            h +=(rValues[j]*w[j]);
+        for(int i=0; i<5; i++){
+            h +=(rValues[i]*w[i]);
         }
 
         return h;
