@@ -37,8 +37,14 @@ struct MyStringHash {
         //outer loop is to iterate through all substrings
         for(int i= 0; i<numString; i++){
              startInd = (len-1)-(6*i);
+            if(startInd<0){
+              break;
+            }
             //inner loop to iterate through each letter in each substring
-            for (int j=startInd; j>=0; j++){
+            for (int j=startInd; j>=startInd - 5; j--){
+                if(j<0){
+                  break;
+                }
                 letterDig = letterDigitToNumber(k[j]);
                 product = letterDig * multiply;
                 multiply*=36;
@@ -46,6 +52,7 @@ struct MyStringHash {
             }  
 
             multiply = 1;
+            //std::cout << "w[" << wInd << "] = " << w[wInd] << std::endl;
             wInd--;
         }
         /*while(index < len){
@@ -75,6 +82,7 @@ struct MyStringHash {
     // A likely helper function is to convert a-z,0-9 to an integral value 0-35
     HASH_INDEX_T letterDigitToNumber(char letter) const
     {
+        letter = tolower(letter);
         // Add code here or delete this helper function if you do not want it
         if(isalpha(letter)){
             return letter - 'a';
