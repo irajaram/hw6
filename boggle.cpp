@@ -96,4 +96,36 @@ bool boggleHelper(const std::set<std::string>& dict, const std::set<std::string>
 {
 //add your solution here!
 
+/*
+1)Check if the tile is valid. (In-bounds in the board ,​and matches the character in the word.)
+2)Invalidate that tile by changing it to an invalid character, like "*". (Which we know will never be in our input.)
+3)Recursively check the left, right, up, and down tiles.
+4)Undo the tile invalidation from step 2.
+5)Return the true if this tile was the end of the word or if any of the recursive calls returned true.*/
+
+//base case
+	if(r >= board.size() || c >= board.size() || r < 0 || c < 0) {
+		return false;
+	} 
+
+//base case
+  if(prefix.find(word)== prefix.end()){			
+		return false;
+  }
+
+
+	word+=board[r][c];
+
+	bool boggVal = boggleHelper(dict, prefix, board, word, result, r+dr, c+dc, dr, dc);
+	if(boggVal){
+		return true; //if a word is not found, but bogg Value returns true meaning this is a prefix, return true to continue building a word through recursion
+	}
+  else{
+    if(dict.find(word)!=dict.end()){
+			result.insert(word);
+			return true; //in case a word is also a prefix, recurse to build upon this word (i.e: act is prefix and word; acting is word with act as prefix)
+    }
+	}
+
+	return false;
 }
